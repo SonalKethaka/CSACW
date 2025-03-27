@@ -1,11 +1,14 @@
 package resource;
 
+import exception.AuthorNotFoundException;
 import exception.BookNotFoundException;
 import exception.InvalidInputException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import model.Author;
 import model.Book;
+import storage.AuthorStorage;
 import storage.BookStorage;
 
 import java.util.List;
@@ -18,11 +21,18 @@ public class BookResource {
     @POST
     public Response addBook(Book book) {
         // Validate input (e.g., future publication year)
-        if (book.getPublicationYear() > 2024) {
+        if (book.getPublicationYear() > 2025) {
 //            return Response.status(Response.Status.BAD_REQUEST)
 //                    .entity("{\"error\":\"Invalid Input\", \"message\":\"Publication year cannot be in the future.\"}")
 //                    .build();
             throw new InvalidInputException("Publication year cannot be in the future.");
+        }
+
+        Author author = AuthorStorage.getAuthorById(book.getAuthorId());
+
+
+        if (author == null){
+            throw new AuthorNotFoundException("\"Author with ID "+ book.getAuthorId() +" does not exist.");
         }
 
         Book added = BookStorage.addBook(book);
