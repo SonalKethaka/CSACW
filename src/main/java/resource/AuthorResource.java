@@ -78,7 +78,7 @@ public class AuthorResource {
         }
 
         List<Book> books = BookStorage.getAllBooks().stream()
-                .filter(book -> book.getAuthorId() == authorId)
+                .filter(book -> book.getAuthor().getId() == authorId)
                 .collect(Collectors.toList());
 
         return Response.ok(books).build();

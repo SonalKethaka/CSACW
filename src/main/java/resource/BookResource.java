@@ -28,12 +28,14 @@ public class BookResource {
             throw new InvalidInputException("Publication year cannot be in the future.");
         }
 
-        Author author = AuthorStorage.getAuthorById(book.getAuthorId());
+        Author author = AuthorStorage.getAuthorById(book.getAuthor().getId());
 
 
         if (author == null){
-            throw new AuthorNotFoundException("\"Author with ID "+ book.getAuthorId() +" does not exist.");
+            throw new AuthorNotFoundException("\"Author with ID "+ book.getAuthor().getId() +" does not exist.");
         }
+
+        book.setAuthor(author);
 
         Book added = BookStorage.addBook(book);
         return Response.status(Response.Status.CREATED).entity(added).build();
@@ -68,6 +70,16 @@ public class BookResource {
 //                    .build();
             throw new BookNotFoundException("Cannot update. Book with ID " + id + " does not exist.");
         }
+
+        if (book.getPublicationYear() > 2025) {
+//            return Response.status(Response.Status.BAD_REQUEST)
+//                    .entity("{\"error\":\"Invalid Input\", \"message\":\"Publication year cannot be in the future.\"}")
+//                    .build();
+            throw new InvalidInputException("Publication year cannot be in the future.");
+        }
+
+        Author author = AuthorStorage.getAuthorById(book.getAuthor().getId());
+        book.setAuthor(author);
         return Response.ok(book).build();
     }
 
