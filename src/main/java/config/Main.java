@@ -27,8 +27,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
-        System.out.println("🚀 Server running at " + BASE_URI);
-        System.out.println("📭 Press ENTER to stop the server...");
+        System.out.println("Server running at " + BASE_URI);
+        System.out.println("Press ENTER to stop the server...");
         System.in.read();
         server.shutdownNow();
     }
